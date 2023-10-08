@@ -847,12 +847,8 @@ class IS_MAL(object):
         self.Size, self.Type, self.ReqI, self.NumM, self.UCID, self.Flags, self.Sp2, self.Sp3, self.SkinID  = self.pack_s.unpack(data)
         return self
 
-
-
 class IS_CIM(object):
-    """Conn Interface Mode
-
-    """
+    """Conn Interface Mode"""
     pack_s = struct.Struct('8B')
     def unpack(self, data):
         self.Size, self.Type, self.ReqI, self.UCID, self.Mode, self.SubMode, self.SelType, self.Sp3 = self.pack_s.unpack(data)
