@@ -852,11 +852,38 @@ def remove_color_codes(input_string):
 
     return result_string
 
+languages = [
+    "af", "sq", "am", "ar", "hy", "az", "eu", "be", "bn", "bs", "bg", "ca", "ceb",
+    "ny", "zh-CN", "zh-TW", "co", "hr", "cs", "da", "nl", "en", "eo", "et", "tl", "fi",
+    "fr", "fy", "gl", "ka", "de", "el", "gu", "ht", "ha", "haw", "iw", "he", "hi", "hmn",
+    "hu", "is", "ig", "id", "ga", "it", "ja", "jw", "kn", "kk", "km", "rw", "ko", "ku",
+    "ky", "lo", "la", "lv", "lt", "lb", "mk", "mg", "ms", "ml", "mt", "mi", "mr", "mn",
+    "my", "ne", "no", "or", "ps", "fa", "pl", "pt", "pa", "ro", "ru", "sm", "gd", "sr",
+    "st", "sn", "sd", "si", "sk", "sl", "so", "es", "su", "sw", "sv", "tg", "ta", "te",
+    "th", "tr", "uk", "ur", "ug", "uz", "vi", "cy", "xh", "yi", "yo", "zu"
+]
+
 def handle_MSO(packet,ID, sock):
     global native_lang
     if packet['ucid'] != 0:
         msg = remove_color_codes(packet['msg'])
-        translated_message = translator(msg, native_lang)
+        if "!translate" in msg:
+            # Split the message into words
+            words = msg.split()
+
+            # Find the index of ",translate" in the list
+            index = words.index(",translate")
+
+            # Check if there are enough words and the next word is a valid language code
+            if index + 2 < len(words) and words[index + 1] in languages:
+                text_to_translate = " ".join(words[index + 2:])
+
+                # Call your translation function with the text and language code
+                translator(text_to_translate, words[index + 1])
+            else:
+                translated_message = translator(msg, "tr")
+        else:
+            translated_message = translator(msg, native_lang)
         log_window.log(ID + "| Translated: " + translated_message)
         if translated_message != packet['msg']:
             sendable_message = "^1Translated: ^6" + translated_message
