@@ -867,7 +867,7 @@ def handle_MSO(packet,ID, sock):
     global native_lang
     if packet['ucid'] != 0:
         msg = remove_color_codes(packet['msg'])
-        if "!translate" in msg:
+        if ",translate" in msg:
             # Split the message into words
             words = msg.split()
 
@@ -879,7 +879,7 @@ def handle_MSO(packet,ID, sock):
                 text_to_translate = " ".join(words[index + 2:])
 
                 # Call your translation function with the text and language code
-                translator(text_to_translate, words[index + 1])
+                translated_message = translator(text_to_translate, words[index + 1])
             else:
                 translated_message = translator(msg, "tr")
         else:
@@ -1052,7 +1052,7 @@ async def main():
         admin_password = b'0907'
     else:
         admin_password = admin_pass
-    InSIM_Nick = b'^3TRAFFIC AI'
+    InSIM_Nick = b'^3Chat Translator'
     uport = 0
     await sendISP_ISI(admin_password, InSIM_Nick, ID,sock, 32, uport)
     packetsReceived = packetGetter()# ISP_VER received

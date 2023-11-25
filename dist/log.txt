@@ -1,0 +1,16 @@
++---This is an Log File for LFS Traffic Mod--+
+[2023-11-13 21:10:53] LFS Translator Mod
+[2023-11-13 21:10:53] Author - Ibrahim Khurram
+[2023-11-13 21:10:53] Email - ibrahimkhurram407@gmail.com
+[2023-11-13 21:10:53] Discord - anonymousgambeats
+[2023-11-13 21:10:53] Github - github.com/ibrahimkhurram407
+[2023-11-13 21:10:53] Threads Running: [('Main', <Thread(Thread-2 (mainExecutor), started 12976)>)]
+[2023-11-13 21:10:53] log Destination: ./logs/
+[2023-11-13 21:10:53] Main| Connecting to InSim: 127.0.0.1:30001
+[2023-11-13 21:10:53] Main| Sending ISI packet...
+[2023-11-13 21:10:53] Main| Received something, Analyzing...
+[2023-11-13 21:10:53] Main| It's ['info: version info', 'ISP_VER'] Packet (2).
+[2023-11-13 21:10:53] Main| Received LFS Version: 0.6R
+[2023-11-13 21:10:53] Main| Received LFS Product: S3
+[2023-11-13 21:10:53] Main| Received InSim Version: 7
+[2023-11-13 21:10:53] Main| Sending MSL packet with message: First Message from Insim!
