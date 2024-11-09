@@ -836,6 +836,7 @@ def sendIS_SMALL_SSP(sock, interval):
     sendToSocket(packed_data, sock)  # Send the packed data over the socket
 
 async def sendISP_ISI(password, nick, ID, sock, flag, udpPort):
+    global INSIM_VERSION
     # Pack the ISI packet into a string.
     if not isinstance(flag, int):
         log_window.log(ID + "| flag bit set to 0 because flag not an integer")
@@ -843,7 +844,7 @@ async def sendISP_ISI(password, nick, ID, sock, flag, udpPort):
     
     # Ensure 'nick' is null-terminated
     nick = nick[:15].ljust(16, b'\0')  # Pad 'nick' to a length of 16 characters with null characters ('\0')
-    
+    prefix = ord(',')
     isi = struct.pack('BBBBHHBBH16s16s',
         44,                         # Size
         dicExtractor("ISP_ISI", isp_packet_types),  # Type
@@ -851,8 +852,8 @@ async def sendISP_ISI(password, nick, ID, sock, flag, udpPort):
         0,                          # Zero
         udpPort,                    # UDPPort
         int(flag),                  # Flags (ISF_MCI: bit 5)
-        0,                          # Sp0
-        0,                          # Prefix
+        INSIM_VERSION,              # ver
+        prefix,                     # Prefix
         0,                          # Interval
         password,                   # Admin (already bytes, no need to encode)
         nick                        # IName (already bytes, no need to encode)
@@ -1011,8 +1012,11 @@ languages = [
 
 def handle_MSO(packet,ID, sock):
     global native_lang
+    user_init = False
     if packet['ucid'] != 0:
         msg = remove_color_codes(packet['msg'])
+        if "Translated:" in msg:
+            return
         if ",translate" in msg:
             # Split the message into words
             words = msg.split()
@@ -1028,12 +1032,16 @@ def handle_MSO(packet,ID, sock):
                 translated_message = translator(text_to_translate, words[index + 1])
             else:
                 translated_message = translator(msg, "tr")
+            user_init = True
         else:
             translated_message = translator(msg, native_lang)
         log_window.log(ID + "| Translated: " + translated_message)
         if translated_message != packet['msg']:
             sendable_message = "^1Translated: ^6" + translated_message
-            sendISP_MSL(sendable_message, id, sock)
+            if user_init:
+                sendISP_MST(sendable_message, id, sock)
+            else: 
+                sendISP_MSL(sendable_message, id, sock)
 
 def closeConnection(ID,sock):
     packet_size = 4  # Size of the packet (excluding the size field itself)
