@@ -1236,8 +1236,15 @@ async def main():
             break
     log_window.log(f"{ID}| First message Received!")
     #Add functionality to listen for mso packets and input commands
+    send_time = 180
+    start_time = time.time()
     while True:
         packetReceived = packetGetter()
+        elapsed_time = time.time() - start_time
+        if elapsed_time > send_time:
+            sendable_message = "^3 Join Traffic Server 66667 ^6Heavy Traffic No hesi 24/7"
+            sendISP_MST(sendable_message, id, sock)
+            start_time = time.time()
         if False in packetReceived:
             break
     #And also add responding logic for mso and input commands 
